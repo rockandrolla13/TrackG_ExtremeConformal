@@ -1,0 +1,252 @@
+name: "Historical Data Download for CL-G4 Extreme Conformal"
+mode: sequential
+
+steps:
+  - name: "Research data sources"
+    agent: gemini
+    prompt: |
+      You are researching free historical financial data sources for quantitative research.
+
+      Read the requirements from: {project_dir}/data/DATA_DOWNLOAD_PROMPT.md
+
+      SOURCES TO EVALUATE:
+      1. HistData.com (https://www.histdata.com/download-free-forex-data/)
+         - Check for: EUR/USD, GBP/USD, USD/JPY
+         - Date range: 2010-2024
+         - Format: CSV or ZIP with CSV
+
+      2. Dukascopy (https://www.dukascopy.com/swiss/english/marketwatch/historical/)
+         - Backup source for FX data
+         - Check if free registration required
+
+      3. CryptoDataDownload (https://www.cryptodatadownload.com/data/)
+         - Check for: BTC/USD, ETH/USD
+         - Date range: 2018-2024
+         - Exchange: Binance or Coinbase
+
+      FOR EACH SOURCE:
+      - Verify pairs available (use web search if needed)
+      - Check exact date ranges available
+      - Document download method (direct URL, form submission, API)
+      - Note file formats (CSV, ZIP, compression)
+      - Identify any obstacles (auth, CAPTCHA, rate limits)
+
+      KNOWN EXTREME EVENTS TO VERIFY:
+      - FX: 2015-01-15 (SNB), 2016-10-07 (Brexit), 2019-01-03 (JPY flash)
+      - Crypto: 2020-03-12 (COVID), 2021-05-19 (May crash), 2022-11-08 (FTX)
+
+      Provide a structured report with:
+      - Recommended source per asset class (FX vs crypto)
+      - Exact download URLs or step-by-step procedures
+      - File format specifications
+      - Any gotchas or warnings
+    timeout: 600
+    on_failure: stop
+
+  - name: "Write FX download script"
+    agent: codex
+    prompt: |
+      Based on the research findings: {prev_step_summary}
+
+      Create src/data/download_fx.py that downloads FX historical data.
+
+      REQUIREMENTS:
+      - Pairs: EUR/USD, GBP/USD, USD/JPY
+      - Date range: 2010-01-01 to 2024-12-31
+      - Frequency: 1-minute OHLCV
+      - Output directory: data/fx/raw/
+      - File naming: {PAIR}_1min_2010_2024.csv (e.g., EURUSD_1min_2010_2024.csv)
+      - CSV schema: datetime,open,high,low,close,volume
+
+      CODE CONSTRAINTS:
+      - Python 3.x with type hints
+      - Dependencies: requests, pandas, zipfile ONLY (no proprietary APIs)
+      - No API keys or authentication required
+      - Progress logging (print statements showing download progress)
+      - Resume capability (check if file exists, skip or append)
+      - Rate limiting: 2-3 second delay between requests
+      - Error handling: retry on network errors (max 3 attempts)
+      - Extract ZIP files automatically if source provides compressed data
+
+      IMPLEMENTATION GUIDELINES:
+      - Use the recommended source from research findings
+      - Add docstrings explaining download procedure
+      - Include main() function that can be called from command line
+      - Log file sizes and estimated completion times
+
+      The script should be production-ready and runnable with: python src/data/download_fx.py
+    timeout: 300
+    on_failure: stop
+
+  - name: "Write crypto download script"
+    agent: codex
+    prompt: |
+      Based on the research findings: {prev_step_summary}
+
+      Create src/data/download_crypto.py that downloads crypto historical data.
+
+      REQUIREMENTS:
+      - Pairs: BTC/USD (or BTC/USDT), ETH/USD (or ETH/USDT)
+      - Date range: 2018-01-01 to 2024-12-31
+      - Frequency: 1-minute OHLCV
+      - Output directory: data/crypto/raw/
+      - File naming: {PAIR}_1min_2018_2024.csv (e.g., BTCUSD_1min_2018_2024.csv)
+      - CSV schema: datetime,open,high,low,close,volume
+
+      CODE CONSTRAINTS:
+      - Follow the same patterns as src/data/download_fx.py for consistency
+      - Python 3.x with type hints
+      - Dependencies: requests, pandas, zipfile ONLY
+      - No API keys or authentication required
+      - Same error handling, logging, resume logic as FX script
+
+      EXCHANGE SELECTION:
+      - Use whichever exchange (Binance or Coinbase) has longest history
+      - Document choice in code comments
+
+      The script should match download_fx.py in style and functionality.
+      Runnable with: python src/data/download_crypto.py
+    timeout: 300
+    on_failure: stop
+
+  - name: "Execute downloads"
+    agent: codex
+    prompt: |
+      Execute the download scripts and save data to the specified directories.
+
+      TASKS:
+      1. Verify directories exist: data/fx/raw/, data/crypto/raw/
+      2. Run: python src/data/download_fx.py
+      3. Run: python src/data/download_crypto.py
+      4. Log progress, file sizes, and any errors
+
+      FAIL-FAST BEHAVIOR:
+      - If FX download fails, log error and STOP (do not proceed to crypto)
+      - If crypto download fails, log error and STOP
+      - Do NOT proceed to validation if downloads incomplete
+
+      EXPECTED OUTPUT:
+      - data/fx/raw/EURUSD_1min_2010_2024.csv (~500MB-2GB)
+      - data/fx/raw/GBPUSD_1min_2010_2024.csv (~500MB-2GB)
+      - data/fx/raw/USDJPY_1min_2010_2024.csv (~500MB-2GB)
+      - data/crypto/raw/BTCUSD_1min_2018_2024.csv (~200MB-1GB)
+      - data/crypto/raw/ETHUSD_1min_2018_2024.csv (~200MB-1GB)
+
+      After each script completes, verify:
+      - Files exist and are non-empty
+      - File sizes are reasonable (>100MB per file)
+      - Log final file sizes
+
+      This step may take 30-60 minutes depending on network speed.
+    timeout: 3600
+    on_failure: stop
+
+  - name: "Validate data quality"
+    agent: codex
+    prompt: |
+      Create and run src/data/validate_data.py to check data quality.
+
+      VALIDATION CHECKS:
+
+      1. Date Completeness:
+         - Load each CSV file
+         - Check for gaps > 1 day (except weekends for FX: Sat/Sun acceptable)
+         - Verify start date is 2010-01-01 for FX, 2018-01-01 for crypto
+         - Verify end date is close to 2024-12-31
+
+      2. Extreme Events Present:
+         FX files should contain these dates:
+         - 2015-01-15 (SNB peg removal)
+         - 2016-10-07 (Brexit flash crash)
+         - 2019-01-03 (JPY flash crash)
+
+         Crypto files should contain these dates:
+         - 2020-03-12 (COVID crash)
+         - 2021-05-19 (May 2021 crash)
+         - 2022-11-08 (FTX collapse)
+
+      3. Data Quality:
+         - No negative prices (open, high, low, close all >= 0)
+         - Volume not zero throughout (at least some non-zero volume)
+         - High >= Low for each row
+         - Close between Low and High
+
+      4. File Sizes:
+         - Reasonable sizes (100-500MB per year per pair)
+         - Log actual file sizes
+
+      5. Timezone:
+         - Attempt to infer timezone from data
+         - Document in validation report
+
+      OUTPUT:
+      - Create validation script: src/data/validate_data.py
+      - Print validation report showing PASS/FAIL for each check
+      - Exit with code 0 if all checks pass, non-zero if any fail
+
+      Run the validation script and report results.
+    timeout: 600
+    on_failure: stop
+
+  - name: "Generate documentation"
+    agent: codex
+    prompt: |
+      Create comprehensive documentation for the downloaded data.
+
+      TASKS:
+
+      1. Create data/fx/README.md:
+         ```markdown
+         # FX Historical Data
+
+         **Source:** [HistData.com or Dukascopy - use actual source]
+         **Download Date:** [today's date: YYYY-MM-DD]
+         **Pairs:** EUR/USD, GBP/USD, USD/JPY
+         **Date Range:** 2010-01-01 to 2024-12-31
+         **Frequency:** 1-minute OHLCV
+         **Timezone:** [UTC or actual timezone from validation]
+         **File Format:** CSV (datetime,open,high,low,close,volume)
+
+         ## Files
+         - EURUSD_1min_2010_2024.csv - [file size]
+         - GBPUSD_1min_2010_2024.csv - [file size]
+         - USDJPY_1min_2010_2024.csv - [file size]
+
+         ## Known Issues
+         [Document any gaps, anomalies, or caveats from validation]
+
+         ## Extreme Events Captured
+         - 2015-01-15: SNB peg removal (Swiss franc)
+         - 2016-10-07: Brexit flash crash (Sterling)
+         - 2019-01-03: JPY flash crash
+         ```
+
+      2. Create data/crypto/README.md:
+         Similar format for crypto, using actual exchange and source
+
+      3. Create data/fx/extreme_events.csv:
+         ```csv
+         datetime,event,description
+         2015-01-15 09:30:00,SNB_PEG_REMOVAL,Swiss National Bank removed EUR/CHF peg
+         2016-10-07 07:00:00,BREXIT_FLASH_CRASH,Sterling flash crash on Brexit uncertainty
+         2019-01-03 07:30:00,JPY_FLASH_CRASH,Japanese yen flash crash during Asian session
+         ```
+
+      4. Create data/crypto/extreme_events.csv:
+         ```csv
+         datetime,event,description
+         2020-03-12 18:00:00,COVID_CRASH,COVID-19 pandemic market crash
+         2021-05-19 12:00:00,MAY_2021_CRASH,Crypto market crash on China mining ban
+         2022-11-08 08:00:00,FTX_COLLAPSE,FTX exchange collapse and market contagion
+         ```
+
+      5. Commit all documentation to git:
+         ```bash
+         git add data/fx/README.md data/crypto/README.md
+         git add data/fx/extreme_events.csv data/crypto/extreme_events.csv
+         git commit -m "docs: add data provenance and extreme events documentation"
+         ```
+
+      Ensure all documentation is production-ready and accurately reflects the actual download.
+    timeout: 300
+    on_failure: stop
