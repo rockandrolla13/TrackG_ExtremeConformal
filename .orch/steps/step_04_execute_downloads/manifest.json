@@ -1,0 +1,30 @@
+{
+  "step": 4,
+  "name": "Execute downloads",
+  "agent": "codex",
+  "captured_at": "2026-03-12T14:27:22.834055",
+  "duration_s": 33.22,
+  "git_sha": "62532632cff2baf12cbe309022e691fca5afca9f",
+  "files_changed": [
+    {
+      "path": ".orch/metrics.jsonl",
+      "sha256": "0983b57de49f466d15d49094f1cd9282c7646331fff743c5797a02079f7c0c71",
+      "size_bytes": 876
+    },
+    {
+      "path": ".orch/state.json",
+      "sha256": "fe808e68aa391c67797a8e9c922046b6393863a565a2ec5f5dd60450ab07ab29",
+      "size_bytes": 15087
+    },
+    {
+      "path": ".orch/steps/step_04_execute_downloads.md",
+      "sha256": "ee5607ca6c00ca6b7ed36c81013f297686e1ecdb6fbb0bcdb43e9ccd7e2d33e7",
+      "size_bytes": 979
+    },
+    {
+      "path": ".orch/steps/step_04_summary.md",
+      "sha256": "5baed3e140bb4603445ba0b2c0d9fefdf15ee7d346085d6152ed14ccbc62acf5",
+      "size_bytes": 567
+    }
+  ]
+}
