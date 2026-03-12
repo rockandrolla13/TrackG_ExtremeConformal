@@ -2,59 +2,29 @@
   "step": 1,
   "name": "Research data sources",
   "agent": "gemini",
-  "captured_at": "2026-03-12T14:22:53.124707",
-  "duration_s": 223.77,
-  "git_sha": "0fd00bdde05600c6d542fcf483e2d4952002be0c",
+  "captured_at": "2026-03-12T15:34:59.366005",
+  "duration_s": 72.48,
+  "git_sha": "3c381e5c76e7f1b5f4655c92e9e1c4f7231d27b4",
   "files_changed": [
     {
-      "path": ".orch/budget.json",
-      "sha256": "be7baf944c2cbf1064540440f6e81a4a5a917d00d06ce579da487b5102f259c4",
-      "size_bytes": 141
-    },
-    {
-      "path": ".orch/budget.lock",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size_bytes": 0
-    },
-    {
-      "path": ".orch/circuit_breaker.json",
-      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
-      "size_bytes": 2
-    },
-    {
-      "path": ".orch/live_status.json",
-      "sha256": "c2b2861db88d502029fe9cf0ba5c3d6d96e57565ebef305dfcbc1ced74466247",
-      "size_bytes": 217
-    },
-    {
       "path": ".orch/metrics.jsonl",
-      "sha256": "56e76b9b0eb01e4468cb11be40a270c64b3c7eaada89ce0a716be1661f3e3c8a",
-      "size_bytes": 220
+      "sha256": "e0f3ed5b8bed353f18c3bcd556bcfde51705e2f6fd705ea611892239aabd304a",
+      "size_bytes": 1535
     },
     {
       "path": ".orch/state.json",
-      "sha256": "0bb58267ee85faa2833da80799c01d7a310c0041b1d891360df2fe65fd9928ca",
-      "size_bytes": 11948
+      "sha256": "be7a328872499189d213a42a3b9fc0008cd3d4066dbae3bb054994629b3c054c",
+      "size_bytes": 15037
     },
     {
-      "path": ".orch/state.lock",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size_bytes": 0
+      "path": ".orch/steps/step_01_research_data_sources.md",
+      "sha256": "319db1b71c2182384011821b95951a444aebeb2b10b0ee5e1af534f4a1437413",
+      "size_bytes": 1201
     },
     {
-      "path": "docs/data_sourcing_report.md",
-      "sha256": "4019ea72386c0b40d8e11b445cb967beea48e77c91bcced504c40b72e0346dda",
-      "size_bytes": 3907
-    },
-    {
-      "path": "src/data/download_crypto.py",
-      "sha256": "c65d9babf7c9c7fb9e01d475403c801450c027663dade224ec539226de096b8a",
-      "size_bytes": 1498
-    },
-    {
-      "path": "src/data/download_fx.py",
-      "sha256": "3aae1ea1f8e9ca8161d2de8fe93ace63065a99ea0e53ee5642938effefde9b7e",
-      "size_bytes": 2898
+      "path": ".orch/steps/step_01_summary.md",
+      "sha256": "3a460f93dda1498fa3d236fe389b5892ee67dd767bb4f03f328b89d5d4817e1e",
+      "size_bytes": 547
     }
   ]
 }
