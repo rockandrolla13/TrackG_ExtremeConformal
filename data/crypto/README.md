@@ -1,36 +1,38 @@
 # Crypto Historical Data
 
-**Source:** [Binance Data Vision](https://data.binance.vision/) for Binance spot market klines
+**Source:** Binance Data Vision (data.binance.vision)
 **Download Date:** 2026-03-12
-**Pairs:** BTC/USDT, ETH/USDT
+**Pairs:** BTCUSDT, ETHUSDT
 **Date Range:** 2018-01-01 to 2024-12-31
-**Frequency:** 1-minute OHLCV
-**Timezone:** UTC (normalization implemented in downloader; validator confirmation pending)
+**Frequency:** 1-minute klines (OHLCV)
+**Timezone:** UTC
 **File Format:** CSV (datetime,open,high,low,close,volume)
 
 ## Files
-- BTCUSDT_1min_2018_2024.csv - missing; no file present in `data/crypto/raw` (`ls -lh` shows `total 0`)
-- ETHUSDT_1min_2018_2024.csv - missing; no file present in `data/crypto/raw` (`ls -lh` shows `total 0`)
+- BTCUSDT_1min_2018_2024.csv - missing; no file present in `data/crypto/raw` (`ls -lh data/crypto/raw` shows `total 0`)
+- ETHUSDT_1min_2018_2024.csv - missing; no file present in `data/crypto/raw` (`ls -lh data/crypto/raw` shows `total 0`)
 
 ## Data Source Details
 - Downloader: `src/data/download_crypto.py`
-- Exchange / source: Binance spot 1-minute monthly kline ZIP archives served from Binance Data Vision.
-- Download method: direct `GET` requests to `https://data.binance.vision/data/spot/monthly/klines/{PAIR}/1m/{PAIR}-1m-YYYY-MM.zip`.
-- Authentication: no API key, cookies, or login required.
-- Rate limiting / retries: the downloader sleeps `2.5` seconds between monthly requests, retries network or invalid-ZIP failures up to `3` times, and exits non-zero on unrecoverable failure.
-- Actual execution result: the crypto stage was not started in Step 4 because the pipeline stopped after the FX DNS failure.
+- Downloaded from Binance's official public data repository using monthly spot kline ZIP archives under `https://data.binance.vision/data/spot/monthly/klines/{PAIR}/1m/`.
+- Intended aggregation: monthly kline files concatenated into single CSV outputs per pair at `data/crypto/raw/{PAIR}_1min_2018_2024.csv`.
+- Download method: direct unauthenticated `GET` requests; no API key, cookies, or login required.
+- Rate limiting / retries: up to `3` attempts per monthly archive, with `2.5` seconds between successful monthly requests.
+- Actual execution result: the crypto stage was never started in Step 4 because the pipeline stopped immediately after the FX DNS failure.
+- Missing months: all months remain missing because no crypto download requests were executed.
 
 ## Validation Summary
 - Expected raw file count: `2`; actual count on 2026-03-12: `0`.
-- Step 4 (`.orch/steps/step_04_execute_downloads.md`): crypto downloads were not attempted because the pipeline failed fast on FX.
+- Missing files: `BTCUSDT_1min_2018_2024.csv` and `ETHUSDT_1min_2018_2024.csv`.
+- Step 4 (`.orch/steps/step_04_execute_downloads.md`): crypto downloads were not attempted because the workflow is fail-fast and FX failed first.
 - Step 5 (`.orch/steps/step_05_validate_data_quality.md`): validation failed the prerequisite check because `data/crypto/raw/` contained no CSV files.
 
 ## Known Issues
-- Missing files: `BTCUSDT_1min_2018_2024.csv` and `ETHUSDT_1min_2018_2024.csv`.
-- Because no raw crypto CSVs exist, there is no validated coverage, gap analysis, anomaly report, or measured file size to record yet.
-- The documented UTC timezone reflects downloader normalization logic, not a completed local validation run.
+- No local crypto dataset is present yet, so file sizes, row counts, missing-month checks, gap analysis, duplicate detection, and anomaly checks could not be measured.
+- The UTC timezone reflects the downloader normalization logic in `src/data/download_crypto.py`, not a completed validation report over actual CSV outputs.
+- Because the crypto stage never ran, the listed extreme-event coverage is expected coverage only.
 
 ## Extreme Events Captured
-- 2020-03-12: COVID-19 market crash
-- 2021-05-19: May 2021 crypto crash (China mining ban)
-- 2022-11-08: FTX collapse and contagion
+- 2020-03-12: COVID-19 crash
+- 2021-05-19: May 2021 crash
+- 2022-11-08: FTX collapse
