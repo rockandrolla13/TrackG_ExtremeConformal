@@ -1,0 +1,54 @@
+\documentclass[11pt]{article}
+
+% Preamble
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{natbib}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage[margin=1in]{geometry}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{remark}{Remark}
+
+% Custom commands
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\ind}{\mathbf{1}}
+
+\title{Extreme Conformal Prediction for Intraday Tail Events}
+\author{Author}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Conformal prediction provides distribution-free coverage guarantees, but at extreme quantiles (99.9\%+) classical methods yield uninformative infinite-width intervals. Financial regulators mandate risk measures at precisely these extreme levels. We bridge extreme value theory and conformal prediction under temporal dependence, using Generalized Pareto Distribution (GPD) extrapolation to extend conformal calibration beyond empirical quantiles while the Barber-Pananjady switch coefficient framework provides coverage guarantees under $\beta$-mixing. Our coverage bound decomposes as $O(\beta(\tau) + n_u^{-1/2})$ where $\beta(\tau)$ captures mixing-induced degradation and $n_u$ is the number of threshold exceedances used for GPD fitting. We introduce a censoring correction for circuit breaker effects that truncate observed extremes. An impossibility result establishes that our method targets heteroscedastic tails specifically: under homoscedastic tail behavior, GPD extrapolation cannot improve on empirical quantiles. Empirical validation on FX flash crashes (SNB 2015, Brexit 2016, JPY 2019) and cryptocurrency tail events (COVID 2020, FTX 2022) shows 30--50\% narrower intervals than classical conformal methods while maintaining nominal coverage.
+\end{abstract}
+
+% Sections
+\input{sections/01_introduction}
+% \input{sections/02_background}
+% \input{sections/03_method}
+% \input{sections/04_theory}
+% \input{sections/05_simulations}
+% \input{sections/06_empirical}
+% \input{sections/07_discussion}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
