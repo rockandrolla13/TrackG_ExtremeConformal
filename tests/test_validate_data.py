@@ -4,12 +4,14 @@ from datetime import date
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from src.data.validate_data import (
     analyze_file,
     check_date_bounds,
     describe_date_gaps,
     find_missing_extreme_dates,
+    has_required_csv_inputs,
     infer_timezone,
 )
 
@@ -78,3 +80,32 @@ def test_analyze_file_quality(tmp_path: Path) -> None:
     assert stats.negative_price_rows == 1
     assert stats.bad_close_range_rows == 1
     assert stats.nonzero_volume_seen is False
+
+
+def test_has_required_csv_inputs_requires_both_directories(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fx_dir = tmp_path / "fx"
+    crypto_dir = tmp_path / "crypto"
+    fx_dir.mkdir()
+    crypto_dir.mkdir()
+    write_csv(
+        fx_dir / "eurusd.csv",
+        [
+            {
+                "datetime": "2010-01-01 00:00:00",
+                "open": 1.0,
+                "high": 1.1,
+                "low": 0.9,
+                "close": 1.0,
+                "volume": 1,
+            }
+        ],
+    )
+
+    monkeypatch.setattr("src.data.validate_data.FX_DIR", fx_dir)
+    monkeypatch.setattr("src.data.validate_data.CRYPTO_DIR", crypto_dir)
+
+    ok, message = has_required_csv_inputs()
+    assert ok is False
+    assert message == "ERROR: No CSV files found. Downloads must have failed."

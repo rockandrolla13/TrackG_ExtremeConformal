@@ -1,18 +1,8 @@
 # Step 5: Validate data quality
-**Timestamp:** 2026-03-12T14:33:02.422646
+**Timestamp:** 2026-03-12T15:43:22.514501
 
 ---
 
-Implemented a data validation script to audit FX/crypto CSV quality and added unit tests for the helper logic. The validator in `src/data/validate_data.py` checks date completeness (with weekend handling for FX), required extreme-event dates, price/volume sanity, file size per year, and a timezone inference heuristic, then prints a PASS/FAIL report and exits non‑zero on any failure.
+Updated the validator so it now enforces the prerequisite exactly as requested in [src/data/validate_data.py](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/src/data/validate_data.py#L70) and [src/data/validate_data.py](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/src/data/validate_data.py#L389): if either raw-data directory has no CSVs, it prints `ERROR: No CSV files found. Downloads must have failed.` and exits non-zero. I added test coverage for that behavior in [tests/test_validate_data.py](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/tests/test_validate_data.py#L85), and wrote the required two-paragraph step summary to [.orch/steps/step_05_summary.md](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/.orch/steps/step_05_summary.md#L1).
 
-Details
-- Added `src/data/validate_data.py` to scan `data/fx/raw` and `data/crypto/raw`, compute gaps, extremes, data-quality flags, and size expectations, and emit a per-file report.
-- Added `tests/test_validate_data.py` to cover gap detection, missing extremes, timezone inference, date bounds, and core quality metrics.
-
-Run results
-- `python src/data/validate_data.py` → FAIL: no CSV files found under `data/fx/raw` or `data/crypto/raw`.
-- `pytest tests/test_validate_data.py` → FAIL: `pandas` not installed in the current test environment.
-
-Next steps (pick any)
-1. Re-run the data downloads so CSVs exist, then re-run `python src/data/validate_data.py`.
-2. Install `pandas` in the test environment and re-run `pytest tests/test_validate_data.py`.
+Run results: the prerequisite check failed because `data/fx/raw/` and `data/crypto/raw/` still contain no CSV files, so `python src/data/validate_data.py` exited with code `1` and reported `Overall result: FAIL`. Test verification passed with `python -m pytest tests/test_validate_data.py` (`6 passed`); the bare `pytest` command is using a different interpreter without `pandas`.

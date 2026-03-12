@@ -67,6 +67,13 @@ class ValidationResult:
     all_passed: bool
 
 
+def has_required_csv_inputs() -> tuple[bool, str | None]:
+    """Verify both raw-data directories contain at least one CSV file."""
+    if not list_csv_files(FX_DIR) or not list_csv_files(CRYPTO_DIR):
+        return False, "ERROR: No CSV files found. Downloads must have failed."
+    return True, None
+
+
 def list_csv_files(directory: Path) -> list[Path]:
     """Return sorted CSV files in the target directory."""
     if not directory.exists():
@@ -381,13 +388,14 @@ def render_report(report: FileReport, stats: FileStats) -> None:
 
 def validate_all() -> ValidationResult:
     """Validate all FX and crypto CSVs under the data directories."""
+    inputs_ok, error_message = has_required_csv_inputs()
+    if not inputs_ok:
+        print(error_message)
+        return ValidationResult(reports=[], all_passed=False)
+
     files = list_csv_files(FX_DIR) + list_csv_files(CRYPTO_DIR)
     reports: list[FileReport] = []
     all_passed = True
-
-    if not files:
-        print("No CSV files found under data/fx/raw or data/crypto/raw.")
-        return ValidationResult(reports=[], all_passed=False)
 
     for path in files:
         report, stats = validate_file(path)
