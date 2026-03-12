@@ -2,39 +2,29 @@
   "step": 5,
   "name": "Validate data quality",
   "agent": "codex",
-  "captured_at": "2026-03-12T15:43:22.524757",
-  "duration_s": 98.08,
-  "git_sha": "b45e76f8aeae075f63989e2ca2451ce67ceac826",
+  "captured_at": "2026-03-12T17:35:44.316416",
+  "duration_s": 94.13,
+  "git_sha": "024b25d175a9948c53a49c31043fab49d8905205",
   "files_changed": [
     {
       "path": ".orch/metrics.jsonl",
-      "sha256": "02af77cb00945925cf8ac4d3d16f11f245f9d566671d9b16686c7aa87ca76ab4",
-      "size_bytes": 2411
+      "sha256": "501259d6a6ef5ace36a5d9868833f82a3e2c8496f1559ec9b10359d7f8298c2a",
+      "size_bytes": 3725
     },
     {
       "path": ".orch/state.json",
-      "sha256": "b85a75a16417ac749ac8e4ec32c438b222e1b3fd85194178614d532c53eaac4b",
-      "size_bytes": 19221
+      "sha256": "1058687fa7c76c15adb03f73cdf78fe7043b57fbdaba63d862caa44c362e684a",
+      "size_bytes": 21539
     },
     {
       "path": ".orch/steps/step_05_summary.md",
-      "sha256": "d7b11d1287576e3587df27f27e08690f294a4882cb315e4e99d8be7fa44b31c0",
-      "size_bytes": 1087
+      "sha256": "48f641820fa889fec2ac7885caa1285c0ff50b1247d6dd419f05c9397526d117",
+      "size_bytes": 1139
     },
     {
       "path": ".orch/steps/step_05_validate_data_quality.md",
-      "sha256": "b249412849b623a6e44669afcaaa1aec1ff645735a6121497914417fa355b4d0",
-      "size_bytes": 1266
-    },
-    {
-      "path": "src/data/validate_data.py",
-      "sha256": "efcbc09047d11e7b9e1980d59a4abb3f03c0d988dfb05c50653e2b0bae9fa0b5",
-      "size_bytes": 14716
-    },
-    {
-      "path": "tests/test_validate_data.py",
-      "sha256": "27699d62753cb763297fefe29c8d027a07b6262740a18a6d813aabc9bbb9a368",
-      "size_bytes": 3207
+      "sha256": "82aad6f09519425ddc894803b12d060f29010fb320033d571e2bb34ea93a3123",
+      "size_bytes": 909
     }
   ]
 }
