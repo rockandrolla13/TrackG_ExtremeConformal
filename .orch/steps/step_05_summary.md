@@ -1,0 +1,3 @@
+Created `src/data/validate_data.py` to scan FX and crypto CSVs for date completeness (including weekend gaps for FX), extreme event coverage, price/volume quality checks, file size expectations, and a timezone inference heuristic based on daily start times. Added unit tests in `tests/test_validate_data.py` covering gap detection, extreme date detection, timezone inference, date bounds, and core data-quality metrics.
+
+Ran `python src/data/validate_data.py` and it failed because no CSV files were found in `data/fx/raw` or `data/crypto/raw`, so the validation report only notes the missing inputs. Attempted `pytest tests/test_validate_data.py` but test collection failed due to `pandas` not being installed in the environment.

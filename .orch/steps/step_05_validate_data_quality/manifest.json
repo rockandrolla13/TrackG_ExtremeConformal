@@ -1,0 +1,40 @@
+{
+  "step": 5,
+  "name": "Validate data quality",
+  "agent": "codex",
+  "captured_at": "2026-03-12T14:33:02.433860",
+  "duration_s": 339.57,
+  "git_sha": "dcab8d11e73afc5ef5b589955249f3d4783c3876",
+  "files_changed": [
+    {
+      "path": ".orch/metrics.jsonl",
+      "sha256": "b24ae9f0a15b415a037c0be8350049dcdd670500ec2dfef8ce92eb6833d3d3de",
+      "size_bytes": 1096
+    },
+    {
+      "path": ".orch/state.json",
+      "sha256": "ea2e826a99ed37c54e7dffdd735fce630d6e1beef01a5894b24451373a1e5116",
+      "size_bytes": 16130
+    },
+    {
+      "path": ".orch/steps/step_05_summary.md",
+      "sha256": "8b09ad327e83d78f786eb97954805ad9bfb57522b8f25016b5cd4b3109532094",
+      "size_bytes": 731
+    },
+    {
+      "path": ".orch/steps/step_05_validate_data_quality.md",
+      "sha256": "6f11fd3c0262440dabb0b2ae6dc2a39fff4e49601d0a2f8612219d86bf7beafb",
+      "size_bytes": 1226
+    },
+    {
+      "path": "src/data/validate_data.py",
+      "sha256": "95ec64803b6058e3e70b3e275cf87f268355f0a661fbc9acd317279f2b32b863",
+      "size_bytes": 14396
+    },
+    {
+      "path": "tests/test_validate_data.py",
+      "sha256": "0a47a777b6d5d8cead1b394c4bb2a7ce2ce37773308c436c9b85459b0bb3628a",
+      "size_bytes": 2348
+    }
+  ]
+}

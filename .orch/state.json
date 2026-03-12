@@ -1,11 +1,11 @@
 {
   "plan_name": "Historical Data Download for CL-G4 Extreme Conformal",
   "plan_file": null,
-  "current_step": 4,
+  "current_step": 5,
   "total_steps": 6,
   "status": "paused",
   "created_at": "2026-03-12T14:19:06.129641",
-  "updated_at": "2026-03-12T14:27:22.823751",
+  "updated_at": "2026-03-12T14:33:02.422894",
   "gh_issue_number": null,
   "gh_issue_url": null,
   "steps": [
@@ -190,6 +190,24 @@
       "duration_s": 33.22,
       "timestamp": "2026-03-12T14:27:22.823678",
       "prompt": "You are working in: /media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal\nRead AGENTS.md for project conventions.\nRead CLAUDE.md for project conventions.\nRead .orch/steps/step_03_write_crypto_download_script.md for context from the previous step.\n\nYOUR TASK:\nExecute the download scripts and save data to the specified directories.\n\nTASKS:\n1. Verify directories exist: data/fx/raw/, data/crypto/raw/\n2. Run: python src/data/download_fx.py\n3. Run: python src/data/download_crypto.py\n4. Log progr"
+    },
+    {
+      "index": 5,
+      "name": "Validate data quality",
+      "agent": "codex",
+      "status": "completed",
+      "prompt_template": "",
+      "repo": "/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal",
+      "branch": "",
+      "timeout": null,
+      "on_failure": "stop",
+      "max_retries": 2,
+      "output_file": "steps/step_05_validate_data_quality.md",
+      "attempts": 0,
+      "last_error": null,
+      "duration_s": 339.57,
+      "timestamp": "2026-03-12T14:33:02.422795",
+      "prompt": "You are working in: /media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal\nRead AGENTS.md for project conventions.\nRead CLAUDE.md for project conventions.\nRead .orch/steps/step_04_summary.md for context from the previous step.\n\nYOUR TASK:\nCreate and run src/data/validate_data.py to check data quality.\n\nVALIDATION CHECKS:\n\n1. Date Completeness:\n   - Load each CSV file\n   - Check for gaps > 1 day (except weekends for FX: Sat/Sun acceptable)\n   - Verify start date is 2010-01-01 for FX, 2018-01"
     }
   ]
 }
