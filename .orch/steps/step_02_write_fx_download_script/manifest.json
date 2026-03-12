@@ -2,39 +2,39 @@
   "step": 2,
   "name": "Write FX download script",
   "agent": "codex",
-  "captured_at": "2026-03-12T14:25:17.516597",
-  "duration_s": 144.35,
-  "git_sha": "48488430a4a63c7f47b105b34c2603bc6d7c062f",
+  "captured_at": "2026-03-12T15:38:15.272020",
+  "duration_s": 195.86,
+  "git_sha": "6beaa6b0efc0b0e270c71b00ec0c333ea16b9c49",
   "files_changed": [
     {
       "path": ".orch/metrics.jsonl",
-      "sha256": "4c6e3a363914ad1f69f426b80394c09952f0cf3ef16a223b031b80c187103951",
-      "size_bytes": 440
+      "sha256": "8302f825f17a49a81d3a274f606aecc7efacc2d2bf741d1dabc8011fa35cf714",
+      "size_bytes": 1755
     },
     {
       "path": ".orch/state.json",
-      "sha256": "2567a7c7b6c7bfce2c0133550f48b4a52e9f2ba68a2d906a9950ef1b079fecc7",
-      "size_bytes": 12998
-    },
-    {
-      "path": "src/data/download_fx.py",
-      "sha256": "799dd70b72ff46ca832399c3ec95f1412f10a321af7e75f8059197e01909351a",
-      "size_bytes": 7387
+      "sha256": "5dbc489e322a3294a8fa25b86a01a417d612e701e9770228b153589f3ea129fa",
+      "size_bytes": 16087
     },
     {
       "path": ".orch/steps/step_02_summary.md",
-      "sha256": "6d5bdc6ca7eb42701d880361e61e955b6cd8c4be8bceda3a2402b7d0a3f8f29c",
-      "size_bytes": 711
+      "sha256": "4bc6d864fac6edbb1ef444b0fa25c2f4243fc85d6b913e6da48b4df636aabd58",
+      "size_bytes": 1311
     },
     {
       "path": ".orch/steps/step_02_write_fx_download_script.md",
-      "sha256": "057359ec616e02f68877d473405d71ce5aa1bcd94da97455212f048bbefb6ff3",
-      "size_bytes": 1102
+      "sha256": "316bccf0d99d499426a01a59fc82482b45545761ca850af486c024389dbc3f8d",
+      "size_bytes": 1113
+    },
+    {
+      "path": "src/data/download_fx.py",
+      "sha256": "04f54f6c3be3616cff1621f775e93ae649dc69175833b4ce3de6c42caf89ad1a",
+      "size_bytes": 8928
     },
     {
       "path": "tests/test_download_fx.py",
-      "sha256": "896224844546bac85be5cb75de25d1a9d6032255f22220ef5561c01416ff8674",
-      "size_bytes": 1175
+      "sha256": "e6d88fb894a6162cf8e42c626c33ff9750bd59892bd6808ad7ebd1dbdfbfa9bb",
+      "size_bytes": 2638
     }
   ]
 }
