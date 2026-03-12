@@ -1,0 +1,40 @@
+{
+  "step": 2,
+  "name": "Write FX download script",
+  "agent": "codex",
+  "captured_at": "2026-03-12T14:25:17.516597",
+  "duration_s": 144.35,
+  "git_sha": "48488430a4a63c7f47b105b34c2603bc6d7c062f",
+  "files_changed": [
+    {
+      "path": ".orch/metrics.jsonl",
+      "sha256": "4c6e3a363914ad1f69f426b80394c09952f0cf3ef16a223b031b80c187103951",
+      "size_bytes": 440
+    },
+    {
+      "path": ".orch/state.json",
+      "sha256": "2567a7c7b6c7bfce2c0133550f48b4a52e9f2ba68a2d906a9950ef1b079fecc7",
+      "size_bytes": 12998
+    },
+    {
+      "path": "src/data/download_fx.py",
+      "sha256": "799dd70b72ff46ca832399c3ec95f1412f10a321af7e75f8059197e01909351a",
+      "size_bytes": 7387
+    },
+    {
+      "path": ".orch/steps/step_02_summary.md",
+      "sha256": "6d5bdc6ca7eb42701d880361e61e955b6cd8c4be8bceda3a2402b7d0a3f8f29c",
+      "size_bytes": 711
+    },
+    {
+      "path": ".orch/steps/step_02_write_fx_download_script.md",
+      "sha256": "057359ec616e02f68877d473405d71ce5aa1bcd94da97455212f048bbefb6ff3",
+      "size_bytes": 1102
+    },
+    {
+      "path": "tests/test_download_fx.py",
+      "sha256": "896224844546bac85be5cb75de25d1a9d6032255f22220ef5561c01416ff8674",
+      "size_bytes": 1175
+    }
+  ]
+}

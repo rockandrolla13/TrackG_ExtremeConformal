@@ -1,0 +1,3 @@
+Implemented a production-ready FX downloader in `src/data/download_fx.py` using HistData monthly ZIPs. The script now handles token discovery, retries, rate limiting, ZIP extraction, CSV normalization to the required schema, resume/append logic based on the last timestamp, and progress logging with file sizes and ETA. It writes consolidated pair files to `data/fx/raw/{PAIR}_1min_2010_2024.csv` and provides a CLI entry point.
+
+Added pytest coverage for key helper functions in `tests/test_download_fx.py`, including month iteration, form payload creation, and CSV parsing for both common HistData formats. The tests avoid network access and validate the required output schema and datetime parsing behavior.
