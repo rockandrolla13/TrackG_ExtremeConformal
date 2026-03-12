@@ -2,7 +2,7 @@
 
 **Generated:** 2026-03-12
 **Project:** TrackG_ExtremeConformal
-**Total Data:** ~2.2 GB across 45 CSV files
+**Total Data:** ~2.2 GB across 57 CSV files
 
 ---
 
@@ -14,7 +14,7 @@
 | **Crypto** | 18 | 431 MB | 1-min + Daily | 2017-2026 | ✅ Complete |
 | **Equities** | 21 | 10.6 MB | Daily | 2000-2024 | ✅ Complete |
 | **Volatility** | 1 | 327 KB | Daily | 1990-2026 | ✅ Complete |
-| **Economic** | 0 | - | - | - | ⏸️ Requires API key |
+| **Economic** | 12 | 2.0 MB | Daily/Monthly/Quarterly | 2000-2026 | ✅ Complete |
 
 ---
 
@@ -167,27 +167,41 @@
 
 ---
 
-## 5. Economic Indicators (Pending)
+## 5. Economic Indicators
 
 **Source:** FRED (Federal Reserve Economic Data)
-**Status:** ⏸️ Script ready, requires free API key
-**Script:** `src/data/download_economic_fred.py`
+**License:** Public domain (U.S. Government data)
+**Quality:** ✅ **Official government data**
+**Use case:** Macroeconomic context for extreme events
 
-**Planned Indicators:**
-- Federal Funds Rate (DFF)
-- 10-Year Treasury (DGS10)
-- 2-Year Treasury (DGS2)
-- Yield Spreads (T10Y2Y, T10Y3M)
-- Unemployment Rate (UNRATE)
-- CPI Inflation (CPIAUCSL)
-- GDP (GDP)
-- High Yield Spread (BAMLH0A0HYM2)
-- AAA Corporate Bonds (AAA)
+| Indicator | File | Size | Rows | Date Range | Frequency |
+|-----------|------|------|------|------------|-----------|
+| VIX Close | `data/economic/raw/VIX_Close_daily.csv` | 303 KB | 9,141 | 1990-2026 | Daily |
+| S&P 500 Index | `data/economic/raw/SP500_Index_daily.csv` | 91 KB | 2,513 | 2010-2024 | Daily |
+| Federal Funds Rate | `data/economic/raw/Federal_Funds_Rate_daily.csv` | 363 KB | 9,567 | 2000-2026 | Daily |
+| Treasury 10Y | `data/economic/raw/Treasury_10Y_daily.csv` | 223 KB | 6,549 | 2000-2026 | Daily |
+| Treasury 2Y | `data/economic/raw/Treasury_2Y_daily.csv` | 211 KB | 6,549 | 2000-2026 | Daily |
+| Yield Spread 10Y-2Y | `data/economic/raw/Yield_Spread_10Y_2Y_daily.csv` | 275 KB | 6,549 | 2000-2026 | Daily |
+| Yield Spread 10Y-3M | `data/economic/raw/Yield_Spread_10Y_3M_daily.csv` | 276 KB | 6,549 | 2000-2026 | Daily |
+| Unemployment Rate | `data/economic/raw/Unemployment_Rate_daily.csv` | 12 KB | 313 | 2000-2026 | Monthly |
+| CPI All Items | `data/economic/raw/CPI_All_Items_daily.csv` | 13 KB | 313 | 2000-2026 | Monthly |
+| GDP | `data/economic/raw/GDP_daily.csv` | 3 KB | 104 | 2000-2024 | Quarterly |
+| High Yield Spread | `data/economic/raw/High_Yield_Spread_daily.csv` | 314 KB | 6,839 | 2000-2026 | Daily |
+| AAA Corporate Bonds | `data/economic/raw/AAA_Corporate_daily.csv` | 10 KB | 314 | 2000-2026 | Monthly |
 
-**To activate:**
-1. Get free API key: https://fred.stlouisfed.org/docs/api/api_key.html
-2. Edit `src/data/download_economic_fred.py` line 30
-3. Run: `python src/data/download_economic_fred.py`
+**Total:** 12 files, 2.0 MB
+
+**Key Economic Events Verified:**
+- ✅ 2008-09-29: Lehman collapse (VIX = 46.72)
+- ✅ 2008-10-24: Crisis peak (VIX = 79.13)
+- ✅ 2009-10: Peak unemployment (10.0%)
+- ✅ 2020-03-16: COVID peak (VIX = 82.69)
+- ✅ 2020-04: COVID unemployment spike (14.8%)
+
+**Yield Curve Inversions (Recession Indicator):**
+- ✅ 2000-2007: Pre-2008 crisis inversions detected
+- ✅ 2019: Pre-COVID inversion (-0.04%)
+- ✅ 2022-2024: Recent inversions (min: -1.08% in 2023)
 
 ---
 
@@ -218,23 +232,24 @@
 ✅ **Real intraday data for crypto** (Binance minute-level)
 ✅ **36 years of VIX data** (1990-2026)
 ✅ **25 years of equity data** (2000-2024)
+✅ **26 years of economic indicators** (2000-2026)
 ✅ **Complete extreme event coverage** (all major crashes present)
 ✅ **Cross-validation data** (multiple exchanges for crypto, multiple indices for equities)
 ✅ **Special event data** (LUNA for Terra collapse, FTT for FTX collapse)
+✅ **Macroeconomic context** (FRED indicators including yield curve inversions)
 
 ### Limitations
 
 ⚠️ **FX minute data is synthetic** (daily OHLC interpolated, not real tick data)
 ⚠️ **Pre-2018 crypto data limited to daily** (no minute data before 2018)
 ⚠️ **Equity data is daily only** (Yahoo Finance limits intraday to 8 days)
-⚠️ **Economic indicators not yet downloaded** (requires FRED API key)
 
 ### Recommendations
 
 1. **For daily analysis:** All data sources are suitable
 2. **For intraday analysis:** Use crypto minute data (real), avoid FX minute data (synthetic)
 3. **For high-frequency research:** Consider Databento ($125 credit) for post-2018 equity tick data
-4. **For economic context:** Set up FRED API key to download macroeconomic indicators
+4. **For economic context:** FRED indicators provide macroeconomic variables and recession signals
 
 ---
 
@@ -249,7 +264,7 @@ All data was downloaded using automated Python scripts:
 | `src/data/download_crypto_cryptodatadownload.py` | Crypto daily data (multi-exchange) | ✅ Working |
 | `src/data/download_equities_yahoo.py` | Equity and index data | ✅ Working |
 | `src/data/download_vix_cboe.py` | VIX volatility index | ✅ Working |
-| `src/data/download_economic_fred.py` | Economic indicators | ⏸️ Needs API key |
+| `src/data/download_economic_fred.py` | Economic indicators | ✅ Working |
 
 ---
 
@@ -269,6 +284,20 @@ data/
 ├── equities/
 │   └── raw/
 │       └── *_daily_20000101_20241231.csv       (21 files)
+├── economic/
+│   └── raw/
+│       ├── VIX_Close_daily.csv                 (303 KB)
+│       ├── SP500_Index_daily.csv               (91 KB)
+│       ├── Federal_Funds_Rate_daily.csv        (363 KB)
+│       ├── Treasury_10Y_daily.csv              (223 KB)
+│       ├── Treasury_2Y_daily.csv               (211 KB)
+│       ├── Yield_Spread_10Y_2Y_daily.csv       (275 KB)
+│       ├── Yield_Spread_10Y_3M_daily.csv       (276 KB)
+│       ├── Unemployment_Rate_daily.csv         (12 KB)
+│       ├── CPI_All_Items_daily.csv             (13 KB)
+│       ├── GDP_daily.csv                       (3 KB)
+│       ├── High_Yield_Spread_daily.csv         (314 KB)
+│       └── AAA_Corporate_daily.csv             (10 KB)
 ├── fx/
 │   ├── raw/
 │   │   ├── EURUSD_1min_2010_2024.csv           (430 MB)
@@ -285,8 +314,8 @@ data/
 ## Next Steps
 
 ### Immediate
-- [ ] Set up FRED API key and download economic indicators
-- [ ] Validate all extreme events are visible in the data
+- [x] Set up FRED API key and download economic indicators ✅ COMPLETE
+- [x] Validate all extreme events are visible in the data ✅ VERIFIED
 - [ ] Document data provenance in research notes
 
 ### Optional Enhancements
@@ -297,7 +326,8 @@ data/
 ---
 
 **Last Updated:** 2026-03-12
-**Total Files:** 45 CSV files
+**Total Files:** 57 CSV files
 **Total Size:** ~2.2 GB
 **Data Quality:** High (with noted FX synthetic limitation)
+**Status:** ✅ All free data sources downloaded and verified
 **Maintainer:** Claude Code / orch orchestration
