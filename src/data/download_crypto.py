@@ -4,25 +4,28 @@ import io
 import time
 from datetime import date
 from pathlib import Path
-from typing import Iterable, Optional
+from typing import Iterable
 from zipfile import ZipFile
 
 import pandas as pd
 import requests
 
-# Binance provides free, unauthenticated 1-minute spot data dumps with history
-# back to 2017+, which is the longest public history available without API keys.
+# Binance Data Vision is the top recommended crypto source from the research:
+# free monthly spot kline ZIP archives, no API key required, and sufficient
+# 1-minute history for BTCUSDT and ETHUSDT back to 2018.
 BASE_URL = "https://data.binance.vision/data/spot/monthly/klines"
 OUTPUT_DIR = Path("data/crypto/raw")
-PAIRS = ["BTCUSDT", "ETHUSDT"]
+PAIRS = ("BTCUSDT", "ETHUSDT")
 START_DATE = date(2018, 1, 1)
 END_DATE = date(2024, 12, 31)
 REQUEST_DELAY_SECONDS = 2.5
 MAX_RETRIES = 3
+REQUEST_TIMEOUT_SECONDS = 60
+CSV_COLUMNS = ["datetime", "open", "high", "low", "close", "volume"]
 
 
 def month_iter(start: date, end: date) -> Iterable[tuple[int, int]]:
-    """Yield (year, month) tuples from start to end inclusive."""
+    """Yield ``(year, month)`` tuples from ``start`` to ``end`` inclusive."""
     year = start.year
     month = start.month
     while (year, month) <= (end.year, end.month):
@@ -34,11 +37,12 @@ def month_iter(start: date, end: date) -> Iterable[tuple[int, int]]:
             month += 1
 
 
-def get_last_timestamp(output_path: Path) -> Optional[pd.Timestamp]:
-    """Read the last datetime from an existing output file for resume support."""
+def get_last_timestamp(output_path: Path) -> pd.Timestamp | None:
+    """Return the last stored timestamp from an existing aggregate CSV."""
     if not output_path.exists():
         return None
-    last_timestamp: Optional[pd.Timestamp] = None
+
+    last_timestamp: pd.Timestamp | None = None
     for chunk in pd.read_csv(
         output_path,
         usecols=["datetime"],
@@ -51,120 +55,162 @@ def get_last_timestamp(output_path: Path) -> Optional[pd.Timestamp]:
 
 
 def build_download_url(pair: str, year: int, month: int) -> str:
-    """Build the Binance monthly ZIP URL for a symbol and month."""
+    """Build the monthly Binance Data Vision kline ZIP URL."""
     filename = f"{pair}-1m-{year}-{month:02d}.zip"
     return f"{BASE_URL}/{pair}/1m/{filename}"
 
 
-def request_zip_bytes(session: requests.Session, url: str) -> bytes:
-    """Request a ZIP archive with retry handling."""
-    last_error: Optional[Exception] = None
+def request_zip_bytes(
+    session: requests.Session,
+    url: str,
+    pair: str,
+    year: int,
+    month: int,
+) -> bytes:
+    """Download a monthly Binance ZIP archive with retry-on-network-failure."""
+    last_error: Exception | None = None
     for attempt in range(1, MAX_RETRIES + 1):
         try:
-            response = session.get(url, timeout=60)
+            response = session.get(url, timeout=REQUEST_TIMEOUT_SECONDS)
             response.raise_for_status()
             if not response.content.startswith(b"PK"):
-                raise ValueError("Response did not contain a ZIP archive.")
+                raise ValueError("response was not a ZIP archive")
             return response.content
         except (requests.RequestException, ValueError) as exc:
             last_error = exc
-            print(f"Attempt {attempt}/{MAX_RETRIES} failed: {exc}")
-            time.sleep(1 + attempt)
-    raise RuntimeError(f"Failed to download data after {MAX_RETRIES} attempts.") from last_error
-
-
-def parse_binance_csv(csv_bytes: bytes) -> pd.DataFrame:
-    """Parse Binance CSV bytes into the required schema."""
-    df = pd.read_csv(io.BytesIO(csv_bytes), header=None)
-    if df.shape[1] < 6:
-        raise ValueError(f"Unexpected CSV format with {df.shape[1]} columns.")
-    df = df.iloc[:, :6]
-    df.columns = ["open_time", "open", "high", "low", "close", "volume"]
-    dt = pd.to_datetime(df["open_time"], unit="ms", utc=True, errors="coerce")
-    df = df.assign(datetime=dt.dt.tz_localize(None))
-    df = df[["datetime", "open", "high", "low", "close", "volume"]]
-    df = df.dropna(subset=["datetime"])
-    return df
+            print(
+                f"{pair} {year}-{month:02d}: attempt {attempt}/{MAX_RETRIES} failed: {exc}"
+            )
+            if attempt < MAX_RETRIES:
+                time.sleep(float(attempt))
+    raise RuntimeError(
+        f"Failed to download {pair} {year}-{month:02d} after {MAX_RETRIES} attempts."
+    ) from last_error
 
 
 def extract_first_csv(zip_bytes: bytes) -> bytes:
-    """Extract the first CSV file from a ZIP archive."""
+    """Extract the first CSV file from a ZIP payload returned by Binance."""
     with ZipFile(io.BytesIO(zip_bytes)) as zip_ref:
-        names = zip_ref.namelist()
+        names = [name for name in zip_ref.namelist() if name.lower().endswith(".csv")]
         if not names:
-            raise ValueError("ZIP archive was empty.")
+            raise ValueError("ZIP archive did not contain a CSV file.")
         with zip_ref.open(names[0]) as file_obj:
             return file_obj.read()
 
 
+def parse_binance_csv(csv_bytes: bytes) -> pd.DataFrame:
+    """Normalize Binance kline rows to ``datetime,open,high,low,close,volume``."""
+    df = pd.read_csv(io.BytesIO(csv_bytes), header=None)
+    if df.shape[1] < 6:
+        raise ValueError(f"Unexpected CSV format with {df.shape[1]} columns.")
+
+    df = df.iloc[:, :6].copy()
+    df.columns = ["open_time", "open", "high", "low", "close", "volume"]
+    dt = pd.to_datetime(df["open_time"], unit="ms", utc=True, errors="coerce")
+    df = df.assign(datetime=dt.dt.tz_localize(None))
+
+    normalized = df[CSV_COLUMNS].dropna(subset=["datetime"]).sort_values("datetime")
+    return normalized.reset_index(drop=True)
+
+
 def append_to_output(output_path: Path, df: pd.DataFrame) -> None:
-    """Append data to the output file with the required schema."""
-    header = not output_path.exists()
-    df.to_csv(output_path, mode="a", index=False, header=header)
+    """Append normalized rows to the aggregate pair CSV."""
+    df.to_csv(output_path, mode="a", index=False, header=not output_path.exists())
+
+
+def format_bytes(num_bytes: int) -> str:
+    """Format a byte count for progress logging."""
+    value = float(num_bytes)
+    for unit in ("B", "KB", "MB", "GB", "TB"):
+        if value < 1024 or unit == "TB":
+            return f"{value:.1f} {unit}"
+        value /= 1024
+    return f"{num_bytes} B"
+
+
+def is_pair_complete(last_timestamp: pd.Timestamp | None) -> bool:
+    """Return whether the aggregated file already covers the requested range."""
+    if last_timestamp is None:
+        return False
+    return last_timestamp >= pd.Timestamp(f"{END_DATE.isoformat()} 23:59:00")
+
+
+def download_pair_data(session: requests.Session, pair: str) -> None:
+    """Download and append all required monthly files for one crypto pair."""
+    output_path = OUTPUT_DIR / f"{pair}_1min_2018_2024.csv"
+    last_timestamp = get_last_timestamp(output_path)
+    if is_pair_complete(last_timestamp):
+        print(f"{pair}: existing file already covers {START_DATE} to {END_DATE}, skipping.")
+        return
+
+    if last_timestamp is None:
+        print(f"{pair}: starting fresh download into {output_path}.")
+    else:
+        print(f"{pair}: resuming after {last_timestamp} into {output_path}.")
+
+    months = list(month_iter(START_DATE, END_DATE))
+    pending_months = [
+        (year, month)
+        for year, month in months
+        if last_timestamp is None or (year, month) >= (last_timestamp.year, last_timestamp.month)
+    ]
+    start_time = time.time()
+
+    for index, (year, month) in enumerate(pending_months, start=1):
+        elapsed = time.time() - start_time
+        average_seconds = elapsed / max(index - 1, 1) if index > 1 else 0.0
+        remaining_seconds = average_seconds * (len(pending_months) - index + 1)
+        print(
+            f"{pair}: [{index}/{len(pending_months)}] requesting {year}-{month:02d} "
+            f"(eta {remaining_seconds / 60:.1f} min)."
+        )
+
+        url = build_download_url(pair, year, month)
+        zip_bytes = request_zip_bytes(session, url, pair, year, month)
+        csv_bytes = extract_first_csv(zip_bytes)
+        df = parse_binance_csv(csv_bytes)
+
+        if last_timestamp is not None:
+            df = df[df["datetime"] > last_timestamp]
+
+        if df.empty:
+            print(
+                f"{pair}: {year}-{month:02d} contained no new rows "
+                f"(zip {format_bytes(len(zip_bytes))}, csv {format_bytes(len(csv_bytes))})."
+            )
+        else:
+            append_to_output(output_path, df)
+            last_timestamp = df["datetime"].iloc[-1]
+            output_size = output_path.stat().st_size
+            print(
+                f"{pair}: wrote {len(df):,} rows through {last_timestamp} "
+                f"(zip {format_bytes(len(zip_bytes))}, csv {format_bytes(len(csv_bytes))}, "
+                f"output {format_bytes(output_size)})."
+            )
+
+        if index < len(pending_months):
+            print(f"{pair}: sleeping {REQUEST_DELAY_SECONDS:.1f}s before next request.")
+            time.sleep(REQUEST_DELAY_SECONDS)
 
 
 def download_crypto_data() -> None:
-    """Download 1-minute crypto data and assemble yearly CSVs.
+    """Download aggregate 1-minute crypto OHLCV files from Binance Data Vision.
 
-    The procedure downloads monthly ZIP archives from Binance data dumps,
-    extracts the CSV, normalizes it to the schema (datetime, open, high, low,
-    close, volume), and appends to a pair-level file in data/crypto/raw. If the
-    output file exists, the downloader resumes from the latest timestamp,
-    avoiding duplicate rows.
+    Binance Data Vision monthly spot kline ZIP archives were the top
+    recommended crypto source from the research. This routine downloads each
+    monthly archive, extracts and normalizes rows, and appends them into
+    ``data/crypto/raw/{PAIR}_1min_2018_2024.csv``. Any unrecoverable failure
+    raises so the CLI exits with status code 1.
     """
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    total_months = len(list(month_iter(START_DATE, END_DATE)))
 
     with requests.Session() as session:
         for pair in PAIRS:
-            output_path = OUTPUT_DIR / f"{pair}_1min_2018_2024.csv"
-            last_timestamp = get_last_timestamp(output_path)
-            if last_timestamp:
-                print(f"{pair}: resuming after {last_timestamp}.")
-            else:
-                print(f"{pair}: starting fresh download.")
-
-            completed_months = 0
-            start_time = time.time()
-
-            for year, month in month_iter(START_DATE, END_DATE):
-                if last_timestamp and (year, month) < (last_timestamp.year, last_timestamp.month):
-                    continue
-
-                url = build_download_url(pair, year, month)
-                print(f"{pair}: downloading {year}-{month:02d}...")
-                zip_bytes = request_zip_bytes(session, url)
-                zip_size = len(zip_bytes)
-
-                csv_bytes = extract_first_csv(zip_bytes)
-                csv_size = len(csv_bytes)
-                df = parse_binance_csv(csv_bytes)
-
-                if last_timestamp:
-                    df = df[df["datetime"] > last_timestamp]
-
-                if not df.empty:
-                    append_to_output(output_path, df)
-                    output_size = output_path.stat().st_size
-                    print(
-                        f"{pair}: wrote {len(df)} rows, zip {zip_size} bytes, "
-                        f"csv {csv_size} bytes, output {output_size} bytes."
-                    )
-                else:
-                    print(f"{pair}: no new rows for {year}-{month:02d}.")
-
-                completed_months += 1
-                elapsed = time.time() - start_time
-                avg_per_month = elapsed / max(completed_months, 1)
-                remaining = total_months - completed_months
-                eta_seconds = remaining * avg_per_month
-                print(f"{pair}: ETA {eta_seconds / 60:.1f} minutes.")
-
-                time.sleep(REQUEST_DELAY_SECONDS)
+            download_pair_data(session, pair)
 
 
 def main() -> None:
-    """CLI entry point."""
+    """Run the crypto download job from the command line."""
     download_crypto_data()
 
 

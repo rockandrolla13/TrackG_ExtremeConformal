@@ -1,16 +1,10 @@
 # Step 3: Write crypto download script
-**Timestamp:** 2026-03-12T14:26:49.561280
+**Timestamp:** 2026-03-12T15:40:18.207118
 
 ---
 
-Added a Binance-based crypto downloader that mirrors the FX script’s flow (monthly ZIPs, retries, resume, ETA) and normalizes to the required OHLCV schema, plus focused pytest coverage for the core helpers. This keeps behavior consistent with `src/data/download_fx.py` while targeting BTCUSDT/ETHUSDT and the 2018–2024 range in `data/crypto/raw`.
+Updated [download_crypto.py](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/src/data/download_crypto.py) to match the FX downloader’s structure and behavior: Binance Data Vision monthly 1-minute ZIPs for `BTCUSDT` and `ETHUSDT`, resume from the last timestamp, completion skipping, retry/error handling, size/ETA logging, and non-zero exit on unrecoverable failure via raised exceptions. It writes `data/crypto/raw/{PAIR}_1min_2018_2024.csv` with the required `datetime,open,high,low,close,volume` schema.
 
-**Details**
-- Downloader implementation in `src/data/download_crypto.py`, with a comment documenting Binance as the longest no-auth source and the same logging/resume logic as FX.
-- Tests in `tests/test_download_crypto.py` cover month iteration, URL construction, CSV parsing, and ZIP extraction.
+Expanded [test_download_crypto.py](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/tests/test_download_crypto.py) to cover the same helper surface as FX, and wrote the required 2-paragraph handoff in [step_03_summary.md](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/.orch/steps/step_03_summary.md).
 
-Tests not run here (environment lacks dependencies).
-
-Next steps if you want:
-1. Run `pytest -q`
-2. Run `python src/data/download_crypto.py`
+Verification: `python -m compileall src/data/download_crypto.py tests/test_download_crypto.py` passed. `pytest -q tests/test_download_crypto.py` could not run here because `pandas` is not installed in the environment.
