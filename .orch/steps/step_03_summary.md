@@ -1,0 +1,3 @@
+Created a Binance-based crypto downloader at `src/data/download_crypto.py` that mirrors the FX script’s structure and behaviors (month iteration, retry handling, ZIP extraction, schema normalization, resume logic, ETA logging). It targets BTCUSDT and ETHUSDT from 2018-01 through 2024-12, writing to `data/crypto/raw` with the required schema and naming conventions, and documents the exchange choice in a code comment.
+
+Added pytest coverage in `tests/test_download_crypto.py` for the core helpers: month iteration, URL construction, CSV parsing normalization, and ZIP extraction. The tests focus on pure functions to match the existing FX downloader’s testing style and keep the new additions compact.

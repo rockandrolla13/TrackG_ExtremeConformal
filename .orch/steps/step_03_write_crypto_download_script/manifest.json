@@ -1,0 +1,40 @@
+{
+  "step": 3,
+  "name": "Write crypto download script",
+  "agent": "codex",
+  "captured_at": "2026-03-12T14:26:49.569818",
+  "duration_s": 92.02,
+  "git_sha": "ed521509283222aba543553ba55e8b29ff8ff84e",
+  "files_changed": [
+    {
+      "path": ".orch/metrics.jsonl",
+      "sha256": "b82b26ba7fb6a11193f2715fcf3784eb6c47ac77c411aa5e3732c1fb0a242cd7",
+      "size_bytes": 658
+    },
+    {
+      "path": ".orch/state.json",
+      "sha256": "4f5c2168ece40a20c0065be55aab45234202771aa9c4f27163090da7c8a79068",
+      "size_bytes": 14054
+    },
+    {
+      "path": "src/data/download_crypto.py",
+      "sha256": "de4c2386786a8bce12085ba7c221a985c7a65f23508d134be39b27c46dde9508",
+      "size_bytes": 6360
+    },
+    {
+      "path": ".orch/steps/step_03_summary.md",
+      "sha256": "55b85a2ef8434433d70645f27f14e7d5f42f5e6794d40e30fba6141867dd9e90",
+      "size_bytes": 708
+    },
+    {
+      "path": ".orch/steps/step_03_write_crypto_download_script.md",
+      "sha256": "fd44f60e3f9ec2881300ed3364eefd7a4ef9c4ce17f9c11a46c3aae83d279edc",
+      "size_bytes": 878
+    },
+    {
+      "path": "tests/test_download_crypto.py",
+      "sha256": "56147e5737e3ce1981a1559f740b3ce8d6d8fe6d856655b8d72a9ed734891f27",
+      "size_bytes": 1406
+    }
+  ]
+}
