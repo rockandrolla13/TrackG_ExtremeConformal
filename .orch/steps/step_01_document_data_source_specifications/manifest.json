@@ -1,0 +1,45 @@
+{
+  "step": 1,
+  "name": "Document data source specifications",
+  "agent": "gemini",
+  "captured_at": "2026-03-12T17:27:02.886937",
+  "duration_s": 52.86,
+  "git_sha": "5cab39d69960527d0a58465970267f4660d4cca2",
+  "files_changed": [
+    {
+      "path": ".orch/metrics.jsonl",
+      "sha256": "6457990fa493e1c7a45c932324e8ca5183c04578e6cd863614a46e98b7e3193b",
+      "size_bytes": 2850
+    },
+    {
+      "path": ".orch/state.json",
+      "sha256": "3608243ca4a61d71dd936468ea527cf43aae21f4214876d69fead0dd6cd63230",
+      "size_bytes": 17355
+    },
+    {
+      "path": ".orch/steps/step_01_summary.md",
+      "sha256": "66c2cb8dfdfb34b7601c1f9009f04fed937efcf65d6f151f8d96c534bcd77772",
+      "size_bytes": 747
+    },
+    {
+      "path": "paper/references.bib",
+      "sha256": "643dbe07f76004a7ec86b68977b1fbdb110eb0fb2e17ddcba241e0323a5f378d",
+      "size_bytes": 5293
+    },
+    {
+      "path": "paper/sections/01_introduction.tex",
+      "sha256": "56bc382042e7d8060113add67aca2fe86675320d9d919be76bffa619cb4ca7ae",
+      "size_bytes": 9179
+    },
+    {
+      "path": ".orch/steps/step_01_document_data_source_specifications.md",
+      "sha256": "04f621a8621d2f98b21cd94fee43d3db7012a19b0881f8d766fe69d7e959d866",
+      "size_bytes": 274
+    },
+    {
+      "path": "docs/data_download_specifications.md",
+      "sha256": "7ab94485c63bd79b5dafaed1ac933e9f6d90d277d3fc31181a601381a5ef9c4f",
+      "size_bytes": 5229
+    }
+  ]
+}
