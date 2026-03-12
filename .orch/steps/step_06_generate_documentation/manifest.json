@@ -1,0 +1,25 @@
+{
+  "step": 6,
+  "name": "Generate documentation",
+  "agent": "codex",
+  "captured_at": "2026-03-12T14:36:18.919298",
+  "duration_s": 196.44,
+  "git_sha": "e614cec116c22870225173098c05a3ca644f7351",
+  "files_changed": [
+    {
+      "path": ".orch/metrics.jsonl",
+      "sha256": "b01eadcdbfe9fc28dad4e2ee709b30774b8f1724ccb86c52a4797c09e0f8a640",
+      "size_bytes": 1315
+    },
+    {
+      "path": ".orch/state.json",
+      "sha256": "87ca7c1d688388635c3f22360938acbc403e50bac34d85c97a36fb48de5bcf3c",
+      "size_bytes": 17180
+    },
+    {
+      "path": ".orch/steps/step_06_generate_documentation.md",
+      "sha256": "aa621b2df57bbdb25ac8736278668d50407355f430fa9546fc4fb4806c57ce9d",
+      "size_bytes": 931
+    }
+  ]
+}
