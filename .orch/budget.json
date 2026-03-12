@@ -1,0 +1,9 @@
+{
+  "total_steps": 6,
+  "ratio": 0.5,
+  "mode": "auto",
+  "claude_used": 0,
+  "escalation_count": 0,
+  "iteration_usage": [],
+  "budget": 3
+}

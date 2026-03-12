@@ -1,0 +1,60 @@
+{
+  "step": 1,
+  "name": "Research data sources",
+  "agent": "gemini",
+  "captured_at": "2026-03-12T14:22:53.124707",
+  "duration_s": 223.77,
+  "git_sha": "0fd00bdde05600c6d542fcf483e2d4952002be0c",
+  "files_changed": [
+    {
+      "path": ".orch/budget.json",
+      "sha256": "be7baf944c2cbf1064540440f6e81a4a5a917d00d06ce579da487b5102f259c4",
+      "size_bytes": 141
+    },
+    {
+      "path": ".orch/budget.lock",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": ".orch/circuit_breaker.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "size_bytes": 2
+    },
+    {
+      "path": ".orch/live_status.json",
+      "sha256": "c2b2861db88d502029fe9cf0ba5c3d6d96e57565ebef305dfcbc1ced74466247",
+      "size_bytes": 217
+    },
+    {
+      "path": ".orch/metrics.jsonl",
+      "sha256": "56e76b9b0eb01e4468cb11be40a270c64b3c7eaada89ce0a716be1661f3e3c8a",
+      "size_bytes": 220
+    },
+    {
+      "path": ".orch/state.json",
+      "sha256": "0bb58267ee85faa2833da80799c01d7a310c0041b1d891360df2fe65fd9928ca",
+      "size_bytes": 11948
+    },
+    {
+      "path": ".orch/state.lock",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/data_sourcing_report.md",
+      "sha256": "4019ea72386c0b40d8e11b445cb967beea48e77c91bcced504c40b72e0346dda",
+      "size_bytes": 3907
+    },
+    {
+      "path": "src/data/download_crypto.py",
+      "sha256": "c65d9babf7c9c7fb9e01d475403c801450c027663dade224ec539226de096b8a",
+      "size_bytes": 1498
+    },
+    {
+      "path": "src/data/download_fx.py",
+      "sha256": "3aae1ea1f8e9ca8161d2de8fe93ace63065a99ea0e53ee5642938effefde9b7e",
+      "size_bytes": 2898
+    }
+  ]
+}
