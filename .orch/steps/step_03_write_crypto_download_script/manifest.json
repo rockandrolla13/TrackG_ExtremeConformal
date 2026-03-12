@@ -2,39 +2,39 @@
   "step": 3,
   "name": "Write crypto download script",
   "agent": "codex",
-  "captured_at": "2026-03-12T15:40:18.218021",
-  "duration_s": 122.9,
-  "git_sha": "70402a995408b3db6ce3889af332faad7f372d67",
+  "captured_at": "2026-03-12T17:32:51.879020",
+  "duration_s": 92.44,
+  "git_sha": "4ff542c14996d6a9479e966b0455009d5b51834f",
   "files_changed": [
     {
       "path": ".orch/metrics.jsonl",
-      "sha256": "e86322eb051d762c7dbed0d87245539e4921453c273af7f91f1db32a915398e4",
-      "size_bytes": 1974
+      "sha256": "976a93c2eafa42668bea44687fd668b304277e2565c8ea78343ff9160a532b27",
+      "size_bytes": 3289
     },
     {
       "path": ".orch/state.json",
-      "sha256": "460b4fd0271eec71331e997f42ca54146c813f7ad261f3eb4bef502cfff0379b",
-      "size_bytes": 17143
+      "sha256": "1764177f033a199c6f69a27e29dde6e04a1836f24a4216bbd58733e31fce634b",
+      "size_bytes": 19461
     },
     {
       "path": ".orch/steps/step_03_summary.md",
-      "sha256": "9a26362e9dd0d1f7f4514aaffe64d49ac91db714e3764368aaae3bde0674046f",
-      "size_bytes": 1230
+      "sha256": "7a8ace473273e0d852f423bb5209d29e62661827fdcc9ddb8874e00f3949babf",
+      "size_bytes": 1470
     },
     {
       "path": ".orch/steps/step_03_write_crypto_download_script.md",
-      "sha256": "1038a3c9105bb5f3378935d9d76518c1a9d7f7b6289ef147c788056dadb33a18",
-      "size_bytes": 1154
+      "sha256": "942cbc9d25dfc3ce9c1b8f2f095cca59dc270a6793c0472128fe2d8319a0cdf1",
+      "size_bytes": 1260
     },
     {
       "path": "src/data/download_crypto.py",
-      "sha256": "0b61b0324d83a82b14221dc3edb9faf2340b0d9dc6846b5ce6242f12e024e3aa",
-      "size_bytes": 7986
+      "sha256": "ed0f94b2ee0c4310f97e831d6fdbaaf7c1153d9d370d9a594a8f7725c2dcf798",
+      "size_bytes": 8092
     },
     {
       "path": "tests/test_download_crypto.py",
-      "sha256": "264f208caddccc4c84e983cfd5d243c06b21fb827f8f41e0717e2508d0954f51",
-      "size_bytes": 2343
+      "sha256": "6fddc884ebc3bea877de21fb4a459170737cc98353449a9fa329ee1f106bfa98",
+      "size_bytes": 4368
     }
   ]
 }

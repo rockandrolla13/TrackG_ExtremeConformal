@@ -60,12 +60,12 @@ def build_download_url(pair: str, year: int, month: int) -> str:
     return f"{BASE_URL}/{pair}/1m/{filename}"
 
 
-def request_zip_bytes(
+def request_content(
     session: requests.Session,
     url: str,
+    *,
     pair: str,
-    year: int,
-    month: int,
+    label: str,
 ) -> bytes:
     """Download a monthly Binance ZIP archive with retry-on-network-failure."""
     last_error: Exception | None = None
@@ -78,13 +78,11 @@ def request_zip_bytes(
             return response.content
         except (requests.RequestException, ValueError) as exc:
             last_error = exc
-            print(
-                f"{pair} {year}-{month:02d}: attempt {attempt}/{MAX_RETRIES} failed: {exc}"
-            )
+            print(f"{pair} {label}: attempt {attempt}/{MAX_RETRIES} failed: {exc}")
             if attempt < MAX_RETRIES:
                 time.sleep(float(attempt))
     raise RuntimeError(
-        f"Failed to download {pair} {year}-{month:02d} after {MAX_RETRIES} attempts."
+        f"Failed to download {pair} {label} after {MAX_RETRIES} attempts."
     ) from last_error
 
 
@@ -165,8 +163,9 @@ def download_pair_data(session: requests.Session, pair: str) -> None:
             f"(eta {remaining_seconds / 60:.1f} min)."
         )
 
+        label = f"{year}-{month:02d}"
         url = build_download_url(pair, year, month)
-        zip_bytes = request_zip_bytes(session, url, pair, year, month)
+        zip_bytes = request_content(session, url, pair=pair, label=label)
         csv_bytes = extract_first_csv(zip_bytes)
         df = parse_binance_csv(csv_bytes)
 
@@ -211,7 +210,11 @@ def download_crypto_data() -> None:
 
 def main() -> None:
     """Run the crypto download job from the command line."""
-    download_crypto_data()
+    try:
+        download_crypto_data()
+    except Exception as exc:
+        print(f"Crypto download failed: {exc}")
+        raise SystemExit(1) from exc
 
 
 if __name__ == "__main__":

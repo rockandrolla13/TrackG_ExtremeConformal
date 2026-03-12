@@ -6,15 +6,19 @@ from pathlib import Path
 from zipfile import ZipFile
 
 import pandas as pd
+import pytest
 
 from src.data.download_crypto import (
     build_download_url,
+    download_crypto_data,
     extract_first_csv,
     format_bytes,
     get_last_timestamp,
     is_pair_complete,
+    main,
     month_iter,
     parse_binance_csv,
+    request_content,
 )
 
 
@@ -67,3 +71,68 @@ def test_is_pair_complete_requires_end_of_range() -> None:
     assert is_pair_complete(pd.Timestamp("2024-12-31 23:59:00")) is True
     assert is_pair_complete(pd.Timestamp("2024-12-31 23:58:00")) is False
     assert is_pair_complete(None) is False
+
+
+class _DummyResponse:
+    def __init__(self, content: bytes) -> None:
+        self.content = content
+
+    def raise_for_status(self) -> None:
+        return None
+
+
+class _DummySession:
+    def __init__(self, content: bytes) -> None:
+        self.content = content
+
+    def get(self, url: str, timeout: int) -> _DummyResponse:
+        del url, timeout
+        return _DummyResponse(self.content)
+
+
+def test_request_content_rejects_non_zip_payload() -> None:
+    session = _DummySession(b"not-a-zip")
+    with pytest.raises(RuntimeError, match="Failed to download BTCUSDT 2024-05"):
+        request_content(
+            session,  # type: ignore[arg-type]
+            "https://example.com/file.zip",
+            pair="BTCUSDT",
+            label="2024-05",
+        )
+
+
+def test_main_exits_with_code_one_on_failure(monkeypatch: pytest.MonkeyPatch) -> None:
+    def fail() -> None:
+        raise RuntimeError("boom")
+
+    monkeypatch.setattr("src.data.download_crypto.download_crypto_data", fail)
+
+    with pytest.raises(SystemExit) as exc_info:
+        main()
+
+    assert exc_info.value.code == 1
+
+
+def test_download_crypto_data_uses_output_dir(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    class _SessionContext:
+        def __enter__(self) -> _SessionContext:
+            return self
+
+        def __exit__(self, exc_type: object, exc: object, tb: object) -> None:
+            del exc_type, exc, tb
+            return None
+
+    seen_pairs: list[str] = []
+
+    def fake_download_pair_data(session: object, pair: str) -> None:
+        del session
+        seen_pairs.append(pair)
+
+    monkeypatch.setattr("src.data.download_crypto.OUTPUT_DIR", tmp_path)
+    monkeypatch.setattr("src.data.download_crypto.requests.Session", _SessionContext)
+    monkeypatch.setattr("src.data.download_crypto.download_pair_data", fake_download_pair_data)
+
+    download_crypto_data()
+
+    assert tmp_path.exists()
+    assert seen_pairs == ["BTCUSDT", "ETHUSDT"]
