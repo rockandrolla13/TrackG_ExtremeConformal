@@ -2,29 +2,29 @@
   "step": 4,
   "name": "Execute downloads",
   "agent": "codex",
-  "captured_at": "2026-03-12T15:41:44.397983",
-  "duration_s": 86.13,
-  "git_sha": "1f2fff2f615068c070d44e4abf80c968878fada1",
+  "captured_at": "2026-03-12T17:34:10.142267",
+  "duration_s": 78.22,
+  "git_sha": "c030cb1f733015d87f93ca1f39582ac390e5dd6f",
   "files_changed": [
     {
       "path": ".orch/metrics.jsonl",
-      "sha256": "a2b7c148115c7a44314ea15a86b864c909f203ef20327add07a3c78a417422c9",
-      "size_bytes": 2192
+      "sha256": "8c39cae074ed751d1240508d1b0e2b40cc213b40304db426a8332c79b2ec5ed0",
+      "size_bytes": 3507
     },
     {
       "path": ".orch/state.json",
-      "sha256": "9e46f69d5447aa0b28ad9e648a9de3278cd3604f445e86066720021b2561ec73",
-      "size_bytes": 18177
+      "sha256": "0aece06a9841503ca3558787c6df784ec674f205fba18ef9c7bc1703523a5521",
+      "size_bytes": 20495
     },
     {
       "path": ".orch/steps/step_04_execute_downloads.md",
-      "sha256": "3ac75b4821d926d1b41753f0984bd4dfe6357ecf0da8f4d386a9cffa92ff7f2e",
-      "size_bytes": 926
+      "sha256": "19273dc9ebbe192a89cd1ff60b60ba6cf095bc601ff5406b4d4ba7f63ceee313",
+      "size_bytes": 771
     },
     {
       "path": ".orch/steps/step_04_summary.md",
-      "sha256": "d397ea8d09a5ed1894b52ca8e47a847ccd06ba2a866f5c9903e00d6f0a6e590d",
-      "size_bytes": 1163
+      "sha256": "12c43244090acd90958121c52f37554084c0183a5dfc834341f616b9199ddda1",
+      "size_bytes": 1340
     }
   ]
 }
