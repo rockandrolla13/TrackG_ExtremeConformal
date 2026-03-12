@@ -1,9 +1,9 @@
 {
   "pipeline": "Historical Data Download for CL-G4 Extreme Conformal (v3 - Hardcoded Sources)",
-  "step": 1,
-  "agent": "gemini",
-  "started_at": "2026-03-12T17:26:10.013195",
+  "step": 2,
+  "agent": "codex",
+  "started_at": "2026-03-12T17:27:02.919973",
   "timeout_s": 300,
   "status": "completed",
-  "elapsed_s": 52
+  "elapsed_s": 256
 }
