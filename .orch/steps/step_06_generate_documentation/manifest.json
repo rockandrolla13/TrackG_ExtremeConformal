@@ -2,29 +2,24 @@
   "step": 6,
   "name": "Generate documentation",
   "agent": "codex",
-  "captured_at": "2026-03-12T15:45:26.545472",
-  "duration_s": 123.98,
-  "git_sha": "fe003db7e99e1f617fda3faa0c8b72092d92748f",
+  "captured_at": "2026-03-12T17:38:09.942011",
+  "duration_s": 145.6,
+  "git_sha": "b0a5277466795c55c49671566f4dcf4b79362ccd",
   "files_changed": [
     {
       "path": ".orch/metrics.jsonl",
-      "sha256": "7327deff86c86a7c715f46553382358ba0be998d1f179e81d2e51d827b29fde2",
-      "size_bytes": 2631
+      "sha256": "435ae94319984365288d24294aebaf94ced4c78faebfb473a3a094465ff4d755",
+      "size_bytes": 3944
     },
     {
       "path": ".orch/state.json",
-      "sha256": "35894b38f8268042e6e212ded91fa294cf9a9b6f894c1e4269b43af692cfc728",
-      "size_bytes": 20267
+      "sha256": "08b7424b84350d53dafff889477cb96cfbea3adc10030d937f1bbc5cbd9aa644",
+      "size_bytes": 22584
     },
     {
       "path": ".orch/steps/step_06_generate_documentation.md",
-      "sha256": "726addd17273baa8cc06368cde51bf1c2ea916e3ce227ce303c6ffa915837353",
-      "size_bytes": 1321
-    },
-    {
-      "path": "paper/sections/01_introduction.tex",
-      "sha256": "b5cae4f9ba011d3da5afa0d79a3bd8726bd6c641cc842204bb88a4e438cc682f",
-      "size_bytes": 9631
+      "sha256": "9d78fce739156785ec19356165c5c9216c36f89b167ea4cace0fadd510a58f2e",
+      "size_bytes": 1474
     }
   ]
 }

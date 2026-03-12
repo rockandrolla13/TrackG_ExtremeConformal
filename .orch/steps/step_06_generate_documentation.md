@@ -1,10 +1,8 @@
 # Step 6: Generate documentation
-**Timestamp:** 2026-03-12T15:45:26.532692
+**Timestamp:** 2026-03-12T17:38:09.932892
 
 ---
 
-Updated the documentation in [data/fx/README.md](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/data/fx/README.md), [data/crypto/README.md](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/data/crypto/README.md), and [.orch/steps/step_06_summary.md](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/.orch/steps/step_06_summary.md). The READMEs now document the prerequisite check result explicitly: `data/fx/raw` has `0` files instead of the expected `3`, and `data/crypto/raw` has `0` files instead of the expected `2`. They also include the configured source, download/auth details, retry/throttling behavior, and the validation failure summary from Steps 4 and 5.
+Verified the prerequisite counts first: `data/fx/raw` has `0` files instead of `3`, and `data/crypto/raw` has `0` files instead of `2`. I updated [data/fx/README.md](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/data/fx/README.md), [data/crypto/README.md](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/data/crypto/README.md), and the required two-paragraph summary at [.orch/steps/step_06_summary.md](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/.orch/steps/step_06_summary.md). The FX README now reflects the actual downloader behavior from `src/data/download_fx.py`: Dukascopy primary, TrueFX fallback, and the real Step 4 failure on DNS resolution for both hosts. The crypto README records Binance Data Vision as the source and notes that the crypto stage never ran because the workflow failed fast on FX.
 
-The extreme-event CSVs at [data/fx/extreme_events.csv](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/data/fx/extreme_events.csv) and [data/crypto/extreme_events.csv](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/data/crypto/extreme_events.csv) already matched the requested schema and contents, so they were staged as-is. Commit created: `fe003db` with message `docs: add data provenance and extreme events documentation`.
-
-Uncommitted unrelated files remain: `.orch/live_status.json` and `.orch/state.json`.
+The extreme-event CSVs at [data/fx/extreme_events.csv](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/data/fx/extreme_events.csv) and [data/crypto/extreme_events.csv](/media/ak/10E1026C4FA6006E/GitRepos/TrackG_ExtremeConformal/data/crypto/extreme_events.csv) already matched the requested content, so they were included in the commit without changes. Commit: `b0a5277` (`docs: add data provenance and extreme events documentation`). I did not touch the unrelated unstaged files `.orch/live_status.json` and `.orch/state.json`.
