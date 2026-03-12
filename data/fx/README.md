@@ -1,24 +1,23 @@
-# FX Data
+# FX Historical Data
 
-## Source
+**Source:** [HistData.com](https://www.histdata.com/download-free-forex-data/)
+**Download Date:** 2026-03-12
+**Pairs:** EUR/USD, GBP/USD, USD/JPY
+**Date Range:** 2010-01-01 to 2024-12-31
+**Frequency:** 1-minute OHLCV
+**Timezone:** EST (GMT-5, per HistData)
+**File Format:** CSV (datetime,open,high,low,close,volume)
 
-The data was downloaded from [HistData.com](https://www.histdata.com/download-free-forex-data/).
+## Files
+- EURUSD_1min_2010_2024.csv - not present (no files found in data/fx/raw)
+- GBPUSD_1min_2010_2024.csv - not present (no files found in data/fx/raw)
+- USDJPY_1min_2010_2024.csv - not present (no files found in data/fx/raw)
 
-## Download Method
+## Known Issues
+- No raw CSVs found under `data/fx/raw` as of 2026-03-12, so coverage, gaps, and timezone validation could not be completed.
+- If downloads are re-run, confirm the timezone via the validator and update this README with actual file sizes.
 
-The data was downloaded using the `src/data/download_fx.py` script.
-The script automates the process of sending POST requests to HistData.com for each month of data from 2010 to 2024 for the following pairs:
-- EUR/USD
-- GBP/USD
-- USD/JPY
-
-The data is 1-minute OHLCV data.
-
-## Timezone
-
-The data is in **Eastern Standard Time (EST)**, as specified by HistData.com. This corresponds to GMT-5.
-
-## Issues
-
-- The download script `src/data/download_fx.py` relies on simulating a form submission to HistData.com. The `tk` form field is currently sent empty, which might cause the download to fail. If the downloads fail, this token may need to be dynamically scraped from the website.
-- The data is downloaded in monthly chunks and then saved as individual CSV files. For analysis, these will likely need to be concatenated.
+## Extreme Events Captured
+- 2015-01-15: SNB peg removal (Swiss franc)
+- 2016-10-07: Brexit flash crash (Sterling)
+- 2019-01-03: JPY flash crash

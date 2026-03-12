@@ -1,0 +1,3 @@
+Documented FX and crypto datasets with provenance, coverage targets, schema, and known issues, and refreshed the extreme-events CSVs to include explicit timestamps, event codes, and descriptions. The READMEs now align with the downloader scripts (HistData for FX, Binance Data Vision for crypto) while clarifying expected file names and the current absence of raw CSVs.
+
+The documentation flags that validation and file-size reporting are pending until data is actually downloaded into `data/fx/raw` and `data/crypto/raw`. Once downloads are present, the README files should be updated with real file sizes and any gap/anomaly notes from the validator.
